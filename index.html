@@ -88,7 +88,7 @@
     <h2>REPORTE DE LLAMADAS</h2>
     <h3>NO AUTORIZADAS</h3>
     <div class="container">
-        <form id="loginForm" autocomplete="on"> <!-- Habilitar autocompletar -->
+        <form id="loginForm" action="report.html" method="post" autocomplete="on"> <!-- Acción redirigida a otra página -->
             <input type="text" id="username" name="username" placeholder="Usuario" autocomplete="username" required><br>
             <input type="password" id="password" name="password" placeholder="Contraseña" autocomplete="current-password" required><br>
             <button type="submit">Acceder</button>
@@ -97,28 +97,5 @@
     </div>
     <div class="bottom-left">BY DATA ANALYTICS</div>
     <div class="bottom-right">COD: MS-000041</div>
-
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event){
-            event.preventDefault();
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // Cambia estos valores por los que desees
-            const correctUsername = "admin@mornese.com";
-            const correctPassword = "1234";
-
-            // Validar usuario y contraseña
-            if(username === correctUsername && password === correctPassword) {
-                // Redirigir al informe de Power BI publicado
-                document.body.innerHTML = `
-                    <h2 style="text-align: center; margin-top: 20px;">REPORTE DE LLAMADAS NO AUTORIZADAS</h2>
-                    <iframe title="alertas llamadas no autorizadas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; border: none;" src="https://app.powerbi.com/view?r=eyJrIjoiNWU5MjRkOWQtMmYzNS00YTc1LTkzYjItNmIwNjM4NjE2MDYzIiwidCI6IjI1ZjQxNzFiLTAxNDEtNDRlOC1iMjdjLTNiYzIxYTg3YjRhNCIsImMiOjR9" allowFullScreen="true"></iframe>
-                `;
-            } else {
-                document.getElementById("error").textContent = "Usuario o contraseña incorrectos";
-            }
-        });
-    </script>
 </body>
 </html>
