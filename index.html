@@ -117,7 +117,7 @@
             // Validar usuario y contraseña
             if(username === correctUsername && password === correctPassword) {
                 // Leer el archivo Excel
-                fetch('https://raw.githubusercontent.com/tu_usuario/tu_repositorio/main/actualizacion.xlsx') // Cambia esta URL a tu archivo
+                fetch('https://raw.githubusercontent.com/JMartinezMornese/Prueba/main/hora actualizacion.xlsx') // Cambia esta URL a tu archivo
                 .then(response => response.arrayBuffer())
                 .then(data => {
                     const workbook = XLSX.read(data);
