@@ -4,82 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Seguro a Power BI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0e0e0e;
-            color: #ffffff;
+            background-color: #e9f3ff; /* Fondo azul claro */
+            background-image: url('https://www.transparenttextures.com/patterns/waves.png'); /* Patrón de olas */
+            background-size: cover; /* Cubre todo el fondo */
+            background-position: center; /* Centra la imagen */
+            color: #333333; /* Color de texto más oscuro */
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Alineación centrada verticalmente */
             height: 100vh;
             margin: 0;
             position: relative;
+            flex-direction: column; /* Para alinear los elementos en columna */
         }
         .container {
-            background-color: #1e1e1e;
-            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con un poco de transparencia */
+            padding: 20px; /* Reducido un 25% */
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra más sutil */
             text-align: center;
             width: 100%;
-            max-width: 400px;
+            max-width: 300px; /* Reducido un 25% */
+            margin-top: 60px; /* Aumentado para bajar más el cuadro */
         }
-        h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #00ffff;
+        h2, h3 {
+            margin-bottom: 5px; /* Espaciado reducido */
+            font-size: 30px; /* Tamaño de fuente igual para ambos */
+            color: #007acc; /* Azul ejecutivo */
+            margin-top: -20px; /* Mueve el título más arriba */
+        }
+        h3 {
+            margin-top: 20px; /* Aumentado para mayor separación */
         }
         input {
             width: 90%;
-            padding: 15px;
+            padding: 10px; /* Reducido un 25% */
             margin: 10px 0;
-            border: none;
+            border: 1px solid #ccc; /* Borde gris */
             border-radius: 5px;
-            background-color: #333333;
-            color: #ffffff;
-            font-size: 16px;
+            background-color: #f9f9f9; /* Fondo muy claro */
+            color: #333333; /* Texto oscuro */
+            font-size: 12px; /* Reducido un 25% */
         }
         button {
             width: 100%;
-            padding: 15px;
-            background-color: #00ffff;
+            padding: 10px; /* Reducido un 25% */
+            background-color: #007acc; /* Azul ejecutivo */
             border: none;
             border-radius: 5px;
-            font-size: 18px;
-            color: #0e0e0e;
+            font-size: 14px; /* Reducido un 25% */
+            color: #ffffff; /* Texto blanco */
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 20px; /* Espacio entre el botón y los cuadros de texto */
         }
         button:hover {
-            background-color: #00cccc;
+            background-color: #005f99; /* Azul más oscuro al pasar el mouse */
         }
         #error {
             color: red;
             margin-top: 10px;
-        }
-        .glow {
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
         }
         .bottom-right {
             position: absolute;
             bottom: 20px;
             right: 20px;
             font-size: 12px;
-            color: #ffffff;
+            color: #333333; /* Texto oscuro */
+        }
+        .bottom-left {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 12px;
+            color: #333333; /* Texto oscuro */
+        }
+        #lastUpdated {
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <h2>REPORTE DE LLAMADAS</h2>
+    <h3>NO AUTORIZADAS</h3>
     <div class="container">
-        <h2 class="glow">Iniciar Sesión</h2>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Usuario" required><br>
             <input type="password" id="password" placeholder="Contraseña" required><br>
             <button type="submit">Acceder</button>
         </form>
         <p id="error"></p>
+        <p id="lastUpdated"></p> <!-- Para mostrar la hora de actualización -->
     </div>
+    <div class="bottom-left">BY DATA ANALYTICS</div>
     <div class="bottom-right">COD: MS-000041</div>
 
     <script>
@@ -94,11 +116,26 @@
 
             // Validar usuario y contraseña
             if(username === correctUsername && password === correctPassword) {
-                // Redirigir al informe de Power BI publicado
-                document.body.innerHTML = `
-                    <h2 class="glow" style="text-align: center; margin-top: 20px;">REPORTE DE LLAMADAS NO AUTORIZADAS</h2>
-                    <iframe title="alertas llamadas no autorizadas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; border: none;" src="https://app.powerbi.com/view?r=eyJrIjoiNWU5MjRkOWQtMmYzNS00YTc1LTkzYjItNmIwNjM4NjE2MDYzIiwidCI6IjI1ZjQxNzFiLTAxNDEtNDRlOC1iMjdjLTNiYzIxYTg3YjRhNCIsImMiOjR9" allowFullScreen="true"></iframe>
-                `;
+                // Leer el archivo Excel
+                fetch('https://raw.githubusercontent.com/tu_usuario/tu_repositorio/main/actualizacion.xlsx') // Cambia esta URL a tu archivo
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(data);
+                    const sheetName = workbook.SheetNames[0]; // Primer hoja
+                    const worksheet = workbook.Sheets[sheetName];
+                    const lastUpdated = worksheet['A1'].v; // Suponiendo que la hora está en A1
+                    document.getElementById('lastUpdated').textContent = `Última actualización: ${lastUpdated}`;
+
+                    // Redirigir al informe de Power BI publicado
+                    document.body.innerHTML = `
+                        <h2 style="text-align: center; margin-top: 20px;">REPORTE DE LLAMADAS NO AUTORIZADAS</h2>
+                        <iframe title="alertas llamadas no autorizadas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; border: none;" src="https://app.powerbi.com/view?r=eyJrIjoiNWU5MjRkOWQtMmYzNS00YTc1LTkzYjItNmIwNjM4NjE2MDYzIiwidCI6IjI1ZjQxNzFiLTAxNDEtNDRlOC1iMjdjLTNiYzIxYTg3YjRhNCIsImMiOjR9" allowFullScreen="true"></iframe>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error al leer el archivo Excel:', error);
+                    document.getElementById('lastUpdated').textContent = 'Error al obtener la última actualización.';
+                });
             } else {
                 document.getElementById("error").textContent = "Usuario o contraseña incorrectos";
             }
