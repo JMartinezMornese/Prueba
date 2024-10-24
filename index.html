@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Seguro a Power BI</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -83,10 +82,6 @@
             font-size: 12px;
             color: #333333; /* Texto oscuro */
         }
-        #lastUpdated {
-            margin-top: 10px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -99,7 +94,6 @@
             <button type="submit">Acceder</button>
         </form>
         <p id="error"></p>
-        <p id="lastUpdated"></p> <!-- Para mostrar la hora de actualización -->
     </div>
     <div class="bottom-left">BY DATA ANALYTICS</div>
     <div class="bottom-right">COD: MS-000041</div>
@@ -116,30 +110,18 @@
 
             // Validar usuario y contraseña
             if(username === correctUsername && password === correctPassword) {
-                // Leer el archivo Excel
-                fetch('https://github.com/JMartinezMornese/Prueba/blob/main/hora%20actualizacion.xlsx') // Cambia esta URL a tu archivo
-                .then(response => response.arrayBuffer())
-                .then(data => {
-                    const workbook = XLSX.read(data);
-                    const sheetName = workbook.SheetNames[0]; // Primer hoja
-                    const worksheet = workbook.Sheets[sheetName];
-                    const lastUpdated = worksheet['A1'].v; // Suponiendo que la hora está en A1
-                    document.getElementById('lastUpdated').textContent = `Última actualización: ${lastUpdated}`;
-
-                    // Redirigir al informe de Power BI publicado
-                    document.body.innerHTML = `
-                        <h2 style="text-align: center; margin-top: 20px;">REPORTE DE LLAMADAS NO AUTORIZADAS</h2>
-                        <iframe title="alertas llamadas no autorizadas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; border: none;" src="https://app.powerbi.com/view?r=eyJrIjoiNWU5MjRkOWQtMmYzNS00YTc1LTkzYjItNmIwNjM4NjE2MDYzIiwidCI6IjI1ZjQxNzFiLTAxNDEtNDRlOC1iMjdjLTNiYzIxYTg3YjRhNCIsImMiOjR9" allowFullScreen="true"></iframe>
-                    `;
-                })
-                .catch(error => {
-                    console.error('Error al leer el archivo Excel:', error);
-                    document.getElementById('lastUpdated').textContent = 'Error al obtener la última actualización.';
-                });
+                // Redirigir al informe de Power BI publicado
+                document.body.innerHTML = `
+                    <h2 style="text-align: center; margin-top: 20px;">REPORTE DE LLAMADAS NO AUTORIZADAS</h2>
+                    <iframe title="alertas llamadas no autorizadas" width="100%" height="100%" style="position: absolute; top: 0; left: 0; border: none;" src="https://app.powerbi.com/view?r=eyJrIjoiNWU5MjRkOWQtMmYzNS00YTc1LTkzYjItNmIwNjM4NjE2MDYzIiwidCI6IjI1ZjQxNzFiLTAxNDEtNDRlOC1iMjdjLTNiYzIxYTg3YjRhNCIsImMiOjR9" allowFullScreen="true"></iframe>
+                `;
             } else {
                 document.getElementById("error").textContent = "Usuario o contraseña incorrectos";
             }
         });
     </script>
+</body>
+</html>
+
 </body>
 </html>
